@@ -1,12 +1,16 @@
 <script setup>
 import { ref } from 'vue';
+import { errorMessages } from 'vue/compiler-sfc';
 const modal = ref(false);
 const newData = ref("");
+let errorMsg = ref("");
 const notes = ref([]);
 function addNewData(){
   if(newData.value.length<10){
+    errorMsg.value = "Input length should be longer than 10 characters"
     return 
   }
+  errorMsg = "";
   notes.value = [...notes.value, {
     id: Math.random()*100000,
     text: newData.value,
@@ -21,8 +25,9 @@ function addNewData(){
 <template>
   <main>
     <div v-if="modal" class="overlay">
-      <div class="modal">
+      <div class="modal"> 
         <textarea v-model.trim="newData" name="data" id="nono" cols="30" rows="10"></textarea>
+        <p v-if="errorMsg">{{ errorMsg }}</p>
         <button @click="addNewData">Add Item</button>
         <button @click="modal=false" class="close">Close</button>
       </div>
